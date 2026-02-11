@@ -19,9 +19,9 @@ Como usuario quiero acceder a una landing clara sobre los servicios de incorpora
 
 Criterios de aceptación
 
-- La landing explica los servicios ofrecidos
-- Existe un CTA visible (Comprar / Contactar)
-- La página carga correctamente en desktop y mobile
+- La landing explica los servicios ofrecidos ✅
+- Existe un CTA visible (Comprar / Contactar) ✅
+- La página carga correctamente en desktop y mobile ✅
 
 🟢 HU 2 – Selección de servicio (demo)
 
@@ -31,9 +31,9 @@ Como usuario quiero seleccionar un servicio desde el ecommerce demo para iniciar
 
 Criterios de aceptación
 
-- El usuario puede elegir al menos un servicio
-- El precio se muestra de forma clara
-- Existe un botón para continuar al checkout
+- El usuario puede elegir al menos un servicio ✅
+- El precio se muestra de forma clara ✅
+- Existe un botón para continuar al checkout ✅
 
 🟢 HU 3 – Checkout demo
 
@@ -43,9 +43,9 @@ Como usuario quiero completar un checkout demo para simular una compra del servi
 
 Criterios de aceptación
 
-- El checkout solicita información básica
-- Existe una acción clara de “Finalizar compra”
-- El flujo no genera errores bloqueantes
+- El checkout solicita información básica ✅
+- Existe una acción clara de “Finalizar compra” ✅
+- El flujo no genera errores bloqueantes ✅
 
 🧱 ETAPA 2 – Registro de conversión y CRM
 🟢 HU 4 – Registro de compra en Pipedrive (Confirmar)
