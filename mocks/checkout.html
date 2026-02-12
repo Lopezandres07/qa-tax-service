@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mock Stripe Checkout</title>
+    <style>
+      .error {
+        color: red;
+        border: 1px solid red;
+      }
+      #error-message {
+        color: red;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Checkout</h1>
+
+    <div class="Checkout-totalAmount">$499.00</div>
+
+    <input
+      id="email"
+      data-testid="input-email"
+      placeholder="Email"
+    />
+    <input
+      id="billingName"
+      data-testid="input-name"
+      placeholder="Nombre"
+    />
+
+    <iframe
+      title="Secure card payment input frame"
+      style="width: 100%; height: 200px; border: 1px solid #eee"
+      srcdoc='
+            <html>
+                <style>.StripeElement--invalid { border: 2px solid red; }</style>
+                <body>
+                    <input id="cardNumber" placeholder="Card Number">
+                    <input id="cardExpiry" placeholder="MM/YY">
+                    <input id="cardCvc" placeholder="CVC">
+                    <script>
+                        // Simular validación de Stripe
+                        document.getElementById("cardNumber").addEventListener("blur", function(e) {
+                            if(e.target.value === "") {
+                                e.target.classList.add("StripeElement--invalid");
+                                e.target.setAttribute("aria-invalid", "true");
+                                window.parent.postMessage("stripe-error", "*");
+                            }
+                        });
+                    </script>
+                </body>
+            </html>
+            '
+    >
+    </iframe>
+
+    <div
+      id="error-message"
+      data-testid="error-message"
+    ></div>
+    <button
+      data-testid="btn-finish-purchase"
+      onclick="finalizar()"
+    >
+      Finalizar compra
+    </button>
+
+    <script>
+      function finalizar() {
+        const email = document.getElementById('email').value
+        // Validación simple
+        if (!email.includes('@')) {
+          const error = document.getElementById('error-message')
+          error.textContent = 'Email inválido'
+          error.style.display = 'block'
+        } else {
+          window.location.href = 'success.html' // Redirección mock
+        }
+      }
+
+      // Escuchar mensaje del iframe (simulando comunicación Stripe -> Web)
+      window.addEventListener('message', (event) => {
+        if (event.data === 'stripe-error') {
+          // Lógica opcional si quieres validar mensajes globales
+        }
+      })
+    </script>
+  </body>
+</html>

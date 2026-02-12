@@ -6,7 +6,8 @@
   "scripts": {
     "test": "cucumber-js && node ./generate.report.js",
     "test:junit": "cucumber-js --format junit:reports/junit.xml",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "serve-mocks": "dotenv -e .env -- http-server ./mocks -p 3000"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,9 @@
     "cucumber-html-reporter": "^7.2.0",
     "playwright": "^1.58.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "http-server": "^14.1.1",
+    "dotenv": "^16.0.3",
+    "dotenv-cli": "^6.0.0"
   }
 }

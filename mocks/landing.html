@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mock Landing Page</title>
+    <style>
+      .plan-card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin: 10px;
+      }
+      .price {
+        font-size: 24px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <nav data-testid="main-nav">
+      <button data-testid="nav-services">Servicios</button>
+    </nav>
+
+    <section
+      data-testid="pricing-section"
+      style="margin-top: 500px"
+    >
+      <h2>Nuestros Planes</h2>
+
+      <div
+        class="plan-card"
+        data-testid="plan-card"
+      >
+        <h3>Plan Básico</h3>
+        <div data-testid="price-amount">$499</div>
+        <button
+          data-testid="btn-start"
+          onclick="window.location.href = 'checkout.html'"
+        >
+          Start Now
+        </button>
+      </div>
+
+      <div
+        class="plan-card"
+        data-testid="plan-card"
+      >
+        <h3>Plan Error</h3>
+        <div data-testid="price-amount"></div>
+        <button data-testid="btn-start">Start Now</button>
+        <div
+          data-testid="price-error"
+          style="display: none; color: red"
+        >
+          Precio no disponible, contacte a soporte
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Simulación simple de lógica de error
+      const cards = document.querySelectorAll('[data-testid="plan-card"]')
+      cards[1].querySelector('button').addEventListener('click', () => {
+        document.querySelector('[data-testid="price-error"]').style.display =
+          'block'
+      })
+    </script>
+  </body>
+</html>
