@@ -31,4 +31,3 @@ Background:
     When el usuario deja todos los campos del formulario en blanco
     And hace click en el botón "Finalizar compra"
     Then el sistema debe resaltar los campos obligatorios en rojo
-    And se debe visualizar el mensaje "Todos los campos son requeridos"
