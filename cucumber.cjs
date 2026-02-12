@@ -8,6 +8,7 @@ module.exports = {
       'progress-bar',
       'json:reports/cucumber-report.json',
       'html:cucumber-report.html',
+      'junit:reports/junit_report.xml',
     ],
   },
 }

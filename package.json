@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "cucumber-js || node ./generate-html-report.js",
+    "test:junit": "cucumber-js --format junit:reports/junit.xml"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Lopezandres07/qa-tax-service.git"
