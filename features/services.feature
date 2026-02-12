@@ -4,7 +4,7 @@ Feature: Interfaz de Usuario y Checkout
   Para adquirir un servicio de Incorporation o Tax
 
 Background:
-    Given que el usuario navega a la landing principal con "?gclid=g_123&fbclid=f_456"
+  Given que el usuario navega a la landing principal con "?gclid=g_123&fbclid=f_456"
     And los datos de tráfico se almacenan correctamente en el sistema
 
   @UI @HU1

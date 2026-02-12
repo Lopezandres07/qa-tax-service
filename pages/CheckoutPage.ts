@@ -3,7 +3,9 @@ import { BasePage } from './BasePage'
 export class CheckoutPage extends BasePage {
   private inputEmail = this.page.locator('#email')
   private inputName = this.page.locator('#billingName')
-  private btnSubscribe = this.page.locator('button:has-text("Subscribe")')
+  private btnSubscribe = this.page.locator(
+    'button:has-text("Finalizar compra"), button:has-text("Subscribe"), [data-testid="btn-finalizar"], [data-testid="btn-subscribe"]',
+  )
   private stripeTotalAmount = this.page.locator(
     '.Checkout-totalAmount, [data-testid="total-amount-text"]',
   )
@@ -26,18 +28,15 @@ export class CheckoutPage extends BasePage {
   }
 
   async llenarFormulario(datos: any) {
-    // Datos personales (fuera del iframe)
     if (datos.email) await this.inputEmail.fill(datos.email)
     if (datos.name) await this.inputName.fill(datos.name)
 
-    // Datos de tarjeta (dentro del iframe)
     // Nota: Stripe a veces requiere que escribas los números con un pequeño delay
     if (datos.card_number) await this.inputCardNumber.fill(datos.card_number)
     if (datos.expiry) await this.inputCardExpiry.fill(datos.expiry)
     if (datos.cvc) await this.inputCardCvc.fill(datos.cvc)
   }
 
-  // Método para verificar si un campo del iframe tiene el estado de error
   async campoTieneError(nombreCampo: 'number' | 'expiry' | 'cvc') {
     const selector = {
       number: '#cardNumber',
@@ -45,9 +44,8 @@ export class CheckoutPage extends BasePage {
       cvc: '#cardCvc',
     }[nombreCampo]
 
-    // Buscamos si el input dentro del iframe tiene la clase de error de Stripe
     const input = this.stripeFrame.locator(selector)
-    // Stripe suele usar clases como ".StripeElement--invalid" o atributos aria
+    // Nota: stripe suele usar clases como ".StripeElement--invalid" o atributos aria
     return await input.getAttribute('class')
   }
 

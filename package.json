@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js || node ./generate-html-report.js",
-    "test:junit": "cucumber-js --format junit:reports/junit.xml"
+    "test": "cucumber-js && node ./generate.report.js",
+    "test:junit": "cucumber-js --format junit:reports/junit.xml",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,11 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.6.0",
     "@playwright/test": "^1.58.2",
-    "@types/node": "^25.2.2"
+    "@types/node": "^25.2.2",
+    "axios": "^1.4.0",
+    "cucumber-html-reporter": "^7.2.0",
+    "playwright": "^1.58.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }

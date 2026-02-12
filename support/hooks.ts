@@ -1,5 +1,6 @@
 import { Before, After, Status, BeforeAll, AfterAll } from '@cucumber/cucumber'
-import { chromium, Browser, Page, BrowserContext } from '@playwright/test'
+import { chromium, Browser } from 'playwright'
+import { CustomWorld } from './world'
 
 let browser: Browser
 
@@ -8,22 +9,24 @@ BeforeAll(async function () {
   browser = await chromium.launch({ headless: true })
 })
 
-Before(async function () {
+Before(async function (this: CustomWorld) {
   // Crea un contexto limpio para cada escenario (limpia cookies/cache)
   this.context = await browser.newContext()
   this.page = await this.context.newPage()
 })
 
-After(async function (scenario) {
+After(async function (this: CustomWorld, scenario: any) {
   // Lógica de Soporte: Si el test falla, adjuntamos evidencia al reporte
   if (scenario.result?.status === Status.FAILED) {
-    const screenshot = await this.page.screenshot()
-    this.attach(screenshot, 'image/png')
+    if (this.page) {
+      const screenshot = await this.page.screenshot()
+      this.attach(screenshot, 'image/png')
+    }
   }
 
   // Cerramos para liberar memoria
-  await this.page.close()
-  await this.context.close()
+  if (this.page) await this.page.close()
+  if (this.context) await this.context.close()
 })
 
 AfterAll(async function () {

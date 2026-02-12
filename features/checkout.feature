@@ -3,8 +3,7 @@ Feature: Realizar compra del servicio
   Para efectuar una compra del servicio
 
 Background:
-    Background:
-    Given que el usuario navega a la landing principal con "?gclid=g_123&fbclid=f_456"
+  Given que el usuario navega a la landing principal con "?gclid=g_123&fbclid=f_456"
     And los datos de tráfico se almacenan correctamente en el sistema
     And el usuario ha seleccionado un servicio de "$499"
     And se valida que el usuario se encuentra en la pasarela de pago

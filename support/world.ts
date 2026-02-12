@@ -1,5 +1,5 @@
 import { setWorldConstructor, World, IWorldOptions } from '@cucumber/cucumber'
-import { BrowserContext, Page } from '@playwright/test'
+import type { BrowserContext, Page } from 'playwright'
 
 export interface CustomWorld extends World {
   context?: BrowserContext
