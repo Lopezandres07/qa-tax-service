@@ -31,3 +31,4 @@ Background:
     When el usuario deja todos los campos del formulario en blanco
     And hace click en el botón "Finalizar compra"
     Then el sistema debe resaltar los campos obligatorios en rojo
+    And no debe permitir el progreso a la página de éxito

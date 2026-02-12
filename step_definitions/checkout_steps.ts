@@ -65,8 +65,10 @@ Then(
   'el sistema debe mostrar un mensaje de alerta {string}',
   async function (mensajeEsperado) {
     const checkout = new CheckoutPage(this.page)
-    await expect(checkout.mensajeError).toBeVisible()
-    await expect(checkout.mensajeError).toHaveText(mensajeEsperado)
+
+    // Esperamos a que el mensaje de Stripe aparezca
+    await expect(checkout.mensajeErrorStripe).toBeVisible()
+    await expect(checkout.mensajeErrorStripe).toContainText(mensajeEsperado)
   },
 )
 
@@ -85,6 +87,7 @@ Then(
   'el sistema debe resaltar los campos obligatorios en rojo',
   async function () {
     const checkout = new CheckoutPage(this.page)
-    await expect(checkout.campoEmail).toHaveAttribute('aria-invalid', 'true')
+    const claseError = await checkout.campoTieneError('number')
+    expect(claseError).toContain('invalid')
   },
 )

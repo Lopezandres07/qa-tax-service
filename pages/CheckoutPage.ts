@@ -1,35 +1,61 @@
 import { BasePage } from './BasePage'
 
 export class CheckoutPage extends BasePage {
-  private inputEmail = this.page.locator('[data-testid="input-email"]')
-  private inputCard = this.page.locator('[data-testid="input-card"]')
-  private inputExpiry = this.page.locator('[data-testid="input-expiry"]')
-  private inputCVC = this.page.locator('[data-testid="input-cvc"]')
-  private inputName = this.page.locator('[data-testid="input-name"]')
-  private btnFinish = this.page.locator('[data-testid="btn-finish-purchase"]')
-  private labelTotalPrice = this.page.locator('[data-testid="total-price"]')
-  private alertError = this.page.locator('[data-testid="error-message"]')
+  private inputEmail = this.page.locator('#email')
+  private inputName = this.page.locator('#billingName')
+  private btnSubscribe = this.page.locator('button:has-text("Subscribe")')
+  private stripeTotalAmount = this.page.locator(
+    '.Checkout-totalAmount, [data-testid="total-amount-text"]',
+  )
 
-  // Getters para que el Step pueda hacer los expects
+  // Selector del IFRAME de Stripe (el contenedor)
+  private stripeFrame = this.page.frameLocator(
+    'iframe[title*="Secure card payment input frame"]',
+  )
+  private stripeErrorMessage = this.page.locator(
+    '#error-message, .ErrorMessage, [role="alert"]',
+  )
+
+  // Selectores DENTRO del iframe
+  private inputCardNumber = this.stripeFrame.locator('#cardNumber')
+  private inputCardExpiry = this.stripeFrame.locator('#cardExpiry')
+  private inputCardCvc = this.stripeFrame.locator('#cardCvc')
+
   get precioTotal() {
-    return this.labelTotalPrice
-  }
-  get mensajeError() {
-    return this.alertError
-  }
-  get campoEmail() {
-    return this.inputEmail
+    return this.stripeTotalAmount
   }
 
   async llenarFormulario(datos: any) {
+    // Datos personales (fuera del iframe)
     if (datos.email) await this.inputEmail.fill(datos.email)
-    if (datos.card_number) await this.inputCard.fill(datos.card_number)
-    if (datos.expiry) await this.inputExpiry.fill(datos.expiry)
-    if (datos.cvc) await this.inputCVC.fill(datos.cvc)
     if (datos.name) await this.inputName.fill(datos.name)
+
+    // Datos de tarjeta (dentro del iframe)
+    // Nota: Stripe a veces requiere que escribas los números con un pequeño delay
+    if (datos.card_number) await this.inputCardNumber.fill(datos.card_number)
+    if (datos.expiry) await this.inputCardExpiry.fill(datos.expiry)
+    if (datos.cvc) await this.inputCardCvc.fill(datos.cvc)
+  }
+
+  // Método para verificar si un campo del iframe tiene el estado de error
+  async campoTieneError(nombreCampo: 'number' | 'expiry' | 'cvc') {
+    const selector = {
+      number: '#cardNumber',
+      expiry: '#cardExpiry',
+      cvc: '#cardCvc',
+    }[nombreCampo]
+
+    // Buscamos si el input dentro del iframe tiene la clase de error de Stripe
+    const input = this.stripeFrame.locator(selector)
+    // Stripe suele usar clases como ".StripeElement--invalid" o atributos aria
+    return await input.getAttribute('class')
+  }
+
+  get mensajeErrorStripe() {
+    return this.stripeErrorMessage
   }
 
   async finalizarCompra() {
-    await this.btnFinish.click()
+    await this.btnSubscribe.click()
   }
 }
