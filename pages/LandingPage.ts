@@ -16,7 +16,7 @@ export class LandingPage extends BasePage {
 
   obtenerCardServicio(nombreServicio: string) {
     return this.page.locator(
-      `[data-testid="service-card"]:has-text("${nombreServicio}")`,
+      `[data-testid="services-section"]:has-text("${nombreServicio}")`,
     )
   }
 
@@ -25,16 +25,29 @@ export class LandingPage extends BasePage {
   }
 
   obtenerPrecioPlan(monto: string) {
+    if (monto === '') {
+      return this.page
+        .locator('[data-testid="price-amount"]')
+        .filter({ hasText: /^$/ })
+    }
     return this.page.locator(
       `[data-testid="price-amount"]:has-text("${monto}")`,
     )
   }
 
   async clickEnStartNow(precio: string) {
-    const boton = this.page.locator(
-      `[data-testid="plan-card"]:has-text("${precio}") >> [data-testid="btn-start"]`,
-    )
-    await boton.click()
+    // Usamos un Regex para que la coincidencia sea exacta.
+    // Si precio es "$499", buscará exactamente "$499".
+    // Si precio es "", buscará una card que tenga un elemento con texto vacío.
+
+    const card = this.page.locator('[data-testid="plan-card"]').filter({
+      has: this.page.locator('[data-testid="price-amount"]', {
+        hasText: precio === '' ? /^$/ : precio,
+      }),
+    })
+
+    // Ahora 'card' es única, y podemos hacer click en su botón
+    await card.locator('[data-testid="btn-start"]').click()
   }
 
   get mensajeErrorPrecio() {

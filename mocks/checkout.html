@@ -11,6 +11,12 @@
       #error-message {
         color: red;
         display: none;
+        margin-top: 10px;
+      }
+      input {
+        display: block;
+        margin: 10px 0;
+        padding: 5px;
       }
     </style>
   </head>
@@ -31,28 +37,18 @@
     />
 
     <iframe
+      id="stripe-iframe"
       title="Secure card payment input frame"
       style="width: 100%; height: 200px; border: 1px solid #eee"
-      srcdoc='
-            <html>
-                <style>.StripeElement--invalid { border: 2px solid red; }</style>
-                <body>
-                    <input id="cardNumber" placeholder="Card Number">
-                    <input id="cardExpiry" placeholder="MM/YY">
-                    <input id="cardCvc" placeholder="CVC">
-                    <script>
-                        // Simular validación de Stripe
-                        document.getElementById("cardNumber").addEventListener("blur", function(e) {
-                            if(e.target.value === "") {
-                                e.target.classList.add("StripeElement--invalid");
-                                e.target.setAttribute("aria-invalid", "true");
-                                window.parent.postMessage("stripe-error", "*");
-                            }
-                        });
-                    </script>
-                </body>
-            </html>
-            '
+      srcdoc="
+        <html>
+            <style>body { margin: 0; padding: 10px; font-family: sans-serif; }</style>
+            <body>
+                <input id='cardNumber' placeholder='Card number' data-testid='input-card-number' /><br>
+                <input id='cardExpiry' placeholder='MM/YY' data-testid='input-card-expiry' /><br>
+                <input id='cardCvc' placeholder='CVC' data-testid='input-card-cvc' />
+            </body>
+        </html>"
     >
     </iframe>
 
@@ -60,6 +56,7 @@
       id="error-message"
       data-testid="error-message"
     ></div>
+
     <button
       data-testid="btn-finish-purchase"
       onclick="finalizar()"
@@ -69,23 +66,41 @@
 
     <script>
       function finalizar() {
+        // 1. Elementos del Padre
         const email = document.getElementById('email').value
+        const billingName = document.getElementById('billingName').value
+
+        // 2. Elementos del Hijo (Iframe)
+        // Obtenemos el iframe primero
+        const iframe = document.getElementById('stripe-iframe')
+        // Accedemos a su documento interno
+        const iframeDoc =
+          iframe.contentDocument || iframe.contentWindow.document
+
+        // Ahora buscamos DENTRO del documento del iframe
+        // Nota: Usamos '?.' (optional chaining) por seguridad, por si el iframe no ha cargado
+        const cardNumber = iframeDoc.getElementById('cardNumber')?.value
+        const cardExpiry = iframeDoc.getElementById('cardExpiry')?.value
+        const cardCvc = iframeDoc.getElementById('cardCvc')?.value
+
+        console.log('Validando:', { email, billingName, cardNumber }) // Para debug en consola
+
         // Validación simple
-        if (!email.includes('@')) {
+        if (
+          !email.includes('@') ||
+          !billingName ||
+          !cardNumber ||
+          !cardExpiry ||
+          !cardCvc
+        ) {
           const error = document.getElementById('error-message')
-          error.textContent = 'Email inválido'
+          error.textContent = 'Campos inválidos o incompletos'
           error.style.display = 'block'
         } else {
-          window.location.href = 'success.html' // Redirección mock
+          // Simulamos éxito
+          window.location.href = 'success.html'
         }
       }
-
-      // Escuchar mensaje del iframe (simulando comunicación Stripe -> Web)
-      window.addEventListener('message', (event) => {
-        if (event.data === 'stripe-error') {
-          // Lógica opcional si quieres validar mensajes globales
-        }
-      })
     </script>
   </body>
 </html>

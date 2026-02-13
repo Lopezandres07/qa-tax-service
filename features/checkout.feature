@@ -9,7 +9,7 @@ Background:
     And se valida que el usuario se encuentra en la pasarela de pago
 
   @UI @HU3
-  Scenario: Efectuar comppra del servicio solicitado con todos los campos ingresados
+  Scenario: Efectuar compra del servicio solicitado con todos los campos ingresados
     Then el precio total a pagar "$499" sea igual al servicio solicitado
     When el usuario rellena el formulario con los siguientes datos:
         | email             | card_number       | expiry | cvc | name          |

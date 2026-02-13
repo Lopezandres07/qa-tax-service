@@ -16,6 +16,6 @@ Background:
     @UI @Negative @HU2
   Scenario: Error de inconsistencia de precios en la selección
     When el usuario visualiza un plan sin precio definido
-    And intenta hacer click en "Start Now"
+    And el usuario hace click en el botón "Start Now" del plan ""
     Then el sistema debe bloquear la redirección al checkout
     And debe mostrar un aviso de "Precio no disponible, contacte a soporte"

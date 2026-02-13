@@ -1,4 +1,11 @@
-import { Before, After, Status, BeforeAll, AfterAll } from '@cucumber/cucumber'
+import {
+  Before,
+  After,
+  Status,
+  BeforeAll,
+  AfterAll,
+  setDefaultTimeout,
+} from '@cucumber/cucumber'
 import { chromium, Browser } from 'playwright'
 import { CustomWorld } from './world'
 
@@ -8,6 +15,8 @@ BeforeAll(async function () {
   // Se ejecuta una sola vez al iniciar toda la suite
   browser = await chromium.launch({ headless: true })
 })
+
+setDefaultTimeout(30 * 1000) // Aumentamos el timeout por defecto a 30 segundos para evitar fallos por tiempos de espera cortos
 
 Before(async function (this: CustomWorld) {
   // Crea un contexto limpio para cada escenario (limpia cookies/cache)

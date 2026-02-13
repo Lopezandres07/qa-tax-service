@@ -21,12 +21,19 @@ When(
 
 Then(
   'se deben visualizar los detalles de {string}, {string} y {string}',
-  async function (this: CustomWorld, s1, s2, s3) {
+  async function (this: CustomWorld, s1: string, s2: string, s3: string) {
     const landing = new LandingPage(this.page!)
     const servicios = [s1, s2, s3]
 
     for (const nombre of servicios) {
       const card = landing.obtenerCardServicio(nombre)
+      const count = await card.count()
+      if (count === 0) {
+        throw new Error(
+          `Se esperaba ver la card del servicio "${nombre}" pero no existe en el DOM`,
+        )
+      }
+      await expect(card).toHaveCount(1)
       await expect(card).toBeVisible()
     }
   },
@@ -34,12 +41,16 @@ Then(
 
 Then(
   'no se visualizan los servicios {string}, {string} y {string}',
-  async function (this: CustomWorld, s1, s2, s3) {
+  async function (this: CustomWorld, s1: string, s2: string, s3: string) {
     const landing = new LandingPage(this.page!)
     const servicios = [s1, s2, s3]
 
     for (const nombre of servicios) {
       const card = landing.obtenerCardServicio(nombre)
+      const count = await card.count()
+      if (count === 0) {
+        continue
+      }
       await expect(card).not.toBeVisible()
     }
   },
